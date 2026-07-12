@@ -157,20 +157,36 @@
     age: document.getElementById('ageError')
   };
 
+  // Google Apps Script Web App URL (deployed with "Anyone" access)
+  var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzUQK6Vc1Rky2TqRNuOpDC0b342YrNKkYalHXmVhH1BfluaeGyrh_iZAIp7ctbIwYCK/exec';
+
   /**
-   * Placeholder submit handler.
-   * Google Apps Script endpoint will be connected later.
-   * For now it simulates a network round-trip so the loading /
-   * success / error states can be built and tested independently
-   * of any backend.
+   * Sends the booking data to the Google Apps Script backend.
+   * Uses text/plain as the content type to avoid triggering a
+   * CORS preflight (OPTIONS) request, which Apps Script web apps
+   * cannot answer. The script on the other end still parses the
+   * body as JSON via e.postData.contents.
    */
   function submitBooking(data) {
-    // Google Apps Script endpoint will be connected later.
-    return new Promise(function (resolve) {
-      window.setTimeout(function () {
-        resolve({ ok: true });
-      }, 1400);
-    });
+    return fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8'
+      },
+      body: JSON.stringify(data)
+    })
+      .then(function (response) {
+        if (!response.ok) {
+          throw new Error('Network response was not OK');
+        }
+        return response.json();
+      })
+      .then(function (result) {
+        if (!result || result.success !== true) {
+          throw new Error('Booking was not saved successfully');
+        }
+        return result;
+      });
   }
 
   function setFieldError(key, message) {
