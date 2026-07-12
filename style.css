@@ -187,6 +187,11 @@ button:focus-visible {
   color: var(--color-teal);
   letter-spacing: -0.01em;
 }
+.logo-img {
+  height: 44px;
+  width: auto;
+  display: block;
+}
 
 .main-nav { flex: 1; display: flex; justify-content: center; }
 .nav-links {
@@ -426,19 +431,11 @@ button:focus-visible {
   position: relative;
   overflow: hidden;
 }
-.portrait-frame::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(120% 90% at 100% 100%, rgba(232, 163, 61, 0.5), transparent 60%);
-}
-.portrait-monogram {
+.portrait-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   position: relative;
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: 4.5rem;
-  color: rgba(251, 248, 242, 0.94);
-  letter-spacing: 0.02em;
 }
 .portrait-caption {
   display: flex;
