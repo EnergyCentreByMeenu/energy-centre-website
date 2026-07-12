@@ -15,6 +15,8 @@
   --color-sunrise-1: #E8A33D;   /* marigold */
   --color-sunrise-2: #E85C41;   /* coral */
   --color-line:      rgba(28, 36, 32, 0.12);
+  --color-success:   #2F6F52;   /* leaf green — success states */
+  --color-error:     #B3432B;   /* muted terracotta-red — error states */
 
   --gradient-sunrise: linear-gradient(135deg, var(--color-sunrise-1) 0%, var(--color-sunrise-2) 100%);
   --gradient-teal: linear-gradient(160deg, var(--color-teal) 0%, var(--color-teal-2) 100%);
@@ -610,4 +612,193 @@ button:focus-visible {
   .float-card { padding: 10px 14px; }
   .float-card-top { top: -2%; left: -2%; }
   .float-card-bottom { right: -2%; }
+}
+
+/* =========================================================
+   Contact / Book Your Free Trial
+   ========================================================= */
+.contact {
+  padding: 96px 0 112px;
+  background: var(--color-bg);
+  border-top: 1px solid var(--color-line);
+}
+
+.contact-intro {
+  max-width: 60ch;
+  margin: 0 auto 48px;
+  text-align: center;
+}
+.contact-intro .eyebrow,
+.contact-intro .section-heading { display: block; }
+.contact-intro .eyebrow { text-align: center; }
+.contact-desc {
+  color: var(--color-ink-soft);
+  font-size: 1.02rem;
+}
+
+.booking-card {
+  max-width: 780px;
+  margin: 0 auto;
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  padding: 32px 22px;
+}
+
+.booking-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.form-field-full { width: 100%; }
+
+.form-field label,
+.pill-group-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-teal);
+}
+.req { color: var(--color-sunrise-2); }
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+  font: inherit;
+  font-size: 0.95rem;
+  color: var(--color-ink);
+  background: var(--color-bg);
+  border: 1.5px solid var(--color-line);
+  border-radius: var(--radius-sm);
+  padding: 13px 16px;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  width: 100%;
+}
+.form-field textarea { resize: vertical; min-height: 90px; font-family: var(--font-body); }
+
+.form-field input::placeholder,
+.form-field textarea::placeholder { color: rgba(28, 36, 32, 0.4); }
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  outline: none;
+  border-color: var(--color-sunrise-2);
+  box-shadow: 0 0 0 4px rgba(232, 92, 65, 0.14);
+}
+
+.form-field input.has-error,
+.form-field select.has-error,
+.form-field textarea.has-error {
+  border-color: var(--color-error);
+}
+
+.field-error {
+  min-height: 1em;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-error);
+}
+
+/* Preferred time — pill-style radio buttons */
+.pill-radio-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.pill-radio-input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+.pill-radio-label {
+  cursor: pointer;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--color-teal);
+  background: var(--color-bg);
+  border: 1.5px solid var(--color-line);
+  border-radius: 999px;
+  padding: 10px 22px;
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+}
+.pill-radio-input:checked + .pill-radio-label {
+  background: var(--gradient-sunrise);
+  border-color: transparent;
+  color: #fff;
+  transform: translateY(-1px);
+}
+.pill-radio-input:focus-visible + .pill-radio-label {
+  outline: 3px solid var(--color-sunrise-2);
+  outline-offset: 3px;
+}
+
+/* Submit button with loading spinner */
+.btn-submit {
+  position: relative;
+  margin-top: 4px;
+  align-self: flex-start;
+}
+.btn-submit .btn-spinner {
+  display: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-top-color: #fff;
+  border-radius: 50%;
+}
+.btn-submit.is-loading { pointer-events: none; opacity: 0.85; }
+.btn-submit.is-loading .btn-spinner {
+  display: inline-block;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Status banner (success / error) */
+.form-status {
+  font-size: 0.9rem;
+  font-weight: 700;
+  border-radius: var(--radius-sm);
+  padding: 0;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.4s var(--ease), opacity 0.4s var(--ease), padding 0.4s var(--ease);
+}
+.form-status.is-visible {
+  padding: 14px 16px;
+  max-height: 120px;
+  opacity: 1;
+}
+.form-status.is-success {
+  background: rgba(47, 111, 82, 0.12);
+  color: var(--color-success);
+  border: 1px solid rgba(47, 111, 82, 0.28);
+}
+.form-status.is-error {
+  background: rgba(179, 67, 43, 0.12);
+  color: var(--color-error);
+  border: 1px solid rgba(179, 67, 43, 0.28);
+}
+
+/* Responsive — tablet & up */
+@media (min-width: 640px) {
+  .booking-card { padding: 44px 48px; }
+  .form-row { grid-template-columns: 1fr 1fr; }
 }
