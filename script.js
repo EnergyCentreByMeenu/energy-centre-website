@@ -158,7 +158,7 @@
   };
 
   // Google Apps Script Web App URL (deployed with "Anyone" access)
-  var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzwtiQYqNNYyBGmcURHf8wuKjglwWZZ-3KHqClRv6O5mLiqSmZ0HfbSIEMzujMnQOw/exec';
+  var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw0fQ0PKW0Qq02xkX37x_cmhXWF0e2ITJljEpBNRwtx1JXYkoyMWEJfIL9nXZCDTm2q/exec';
 
   /**
    * Sends the booking data to the Google Apps Script backend.
