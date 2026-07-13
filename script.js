@@ -302,3 +302,177 @@
   });
 
 })();
+/* =========================================================
+   Enroll Now — purchase.html enrollment form
+   Self-contained module. Reuses the same Apps Script endpoint.
+   ========================================================= */
+(function () {
+  'use strict';
+
+  var form = document.getElementById('purchaseForm');
+  if (!form) return; // not on purchase.html
+
+  var submitBtn = document.getElementById('pSubmitBtn');
+  var statusEl = document.getElementById('pFormStatus');
+  var courseDisplay = document.getElementById('courseNameDisplay');
+  var courseField = document.getElementById('pCourse');
+
+  var fields = {
+    fullName: document.getElementById('pFullName'),
+    mobile: document.getElementById('pMobile'),
+    email: document.getElementById('pEmail'),
+    age: document.getElementById('pAge')
+  };
+  var errors = {
+    fullName: document.getElementById('pFullNameError'),
+    mobile: document.getElementById('pMobileError'),
+    email: document.getElementById('pEmailError'),
+    age: document.getElementById('pAgeError')
+  };
+
+  // Same Google Apps Script Web App URL used by the Free Trial form.
+  // Change this one variable if the endpoint ever moves.
+  var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzUQK6Vc1Rky2TqRNuOpDC0b342YrNKkYalHXmVhH1BfluaeGyrh_iZAIp7ctbIwYCK/exec';
+
+  // Read course name from the URL, e.g. purchase.html?course=Face%20Yoga
+  var params = new URLSearchParams(window.location.search);
+  var courseName = (params.get('course') || '').trim();
+  if (courseName) {
+    courseDisplay.textContent = courseName;
+    courseField.value = courseName;
+    document.title = courseName + ' Enrollment | Energy Centre';
+  } else {
+    courseDisplay.textContent = 'Not selected';
+  }
+
+  function submitEnrollment(data) {
+    return fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(data)
+    })
+      .then(function (response) {
+        if (!response.ok) throw new Error('Network response was not OK');
+        return response.json();
+      })
+      .then(function (result) {
+        if (!result || result.success !== true) {
+          throw new Error('Enrollment was not saved successfully');
+        }
+        return result;
+      });
+  }
+
+  function setFieldError(key, message) {
+    if (fields[key]) fields[key].classList.toggle('has-error', Boolean(message));
+    if (errors[key]) errors[key].textContent = message || '';
+  }
+
+  function clearAllErrors() {
+    Object.keys(fields).forEach(function (key) { setFieldError(key, ''); });
+  }
+
+  function showStatus(message, type) {
+    statusEl.textContent = message;
+    statusEl.classList.remove('is-success', 'is-error');
+    statusEl.classList.add('is-visible', type === 'success' ? 'is-success' : 'is-error');
+  }
+
+  function hideStatus() {
+    statusEl.classList.remove('is-visible', 'is-success', 'is-error');
+    statusEl.textContent = '';
+  }
+
+  function setLoading(isLoading) {
+    submitBtn.classList.toggle('is-loading', isLoading);
+    submitBtn.disabled = isLoading;
+    submitBtn.querySelector('.btn-text').textContent = isLoading ? 'Enrolling…' : 'Enroll Now';
+  }
+
+  function isValidEmail(value) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  }
+
+  function isValidMobile(value) {
+    var digitsOnly = value.replace(/[\s-]/g, '');
+    return /^\+?\d{7,15}$/.test(digitsOnly);
+  }
+
+  function validate(data) {
+    var isValid = true;
+    var firstInvalidField = null;
+
+    if (!data.fullName || data.fullName.trim().length < 2) {
+      setFieldError('fullName', 'Please enter your full name.');
+      isValid = false;
+      firstInvalidField = firstInvalidField || fields.fullName;
+    }
+
+    if (!data.mobile || !isValidMobile(data.mobile)) {
+      setFieldError('mobile', 'Please enter a valid mobile number.');
+      isValid = false;
+      firstInvalidField = firstInvalidField || fields.mobile;
+    }
+
+    if (data.email && !isValidEmail(data.email)) {
+      setFieldError('email', 'Please enter a valid email address.');
+      isValid = false;
+      firstInvalidField = firstInvalidField || fields.email;
+    }
+
+    if (data.age && (Number(data.age) < 5 || Number(data.age) > 100)) {
+      setFieldError('age', 'Please enter an age between 5 and 100.');
+      isValid = false;
+      firstInvalidField = firstInvalidField || fields.age;
+    }
+
+    if (firstInvalidField) firstInvalidField.focus();
+    return isValid;
+  }
+
+  Object.keys(fields).forEach(function (key) {
+    if (!fields[key]) return;
+    fields[key].addEventListener('input', function () { setFieldError(key, ''); });
+  });
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    hideStatus();
+
+    var formData = new FormData(form);
+    var data = {
+      fullName: (formData.get('fullName') || '').toString().trim(),
+      mobile: (formData.get('mobile') || '').toString().trim(),
+      email: (formData.get('email') || '').toString().trim(),
+      age: (formData.get('age') || '').toString().trim(),
+      gender: (formData.get('gender') || '').toString(),
+      preferredTime: (formData.get('preferredTime') || '').toString(),
+      experience: (formData.get('experience') || '').toString(),
+      medicalNotes: (formData.get('medicalNotes') || '').toString().trim(),
+      course: (formData.get('course') || '').toString(),
+      formType: 'Enrollment'
+    };
+
+    clearAllErrors();
+    if (!validate(data)) {
+      showStatus('Please fix the highlighted fields and try again.', 'error');
+      return;
+    }
+
+    setLoading(true);
+
+    submitEnrollment(data)
+      .then(function () {
+        showStatus("You're enrolled! Meenu's team will reach out shortly to confirm.", 'success');
+        form.reset();
+        courseField.value = courseName;
+      })
+      .catch(function () {
+        showStatus('Something went wrong while enrolling. Please try again.', 'error');
+      })
+      .finally(function () {
+        setLoading(false);
+      });
+  });
+
+})();

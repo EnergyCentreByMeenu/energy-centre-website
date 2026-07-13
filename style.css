@@ -799,3 +799,87 @@ button:focus-visible {
   .booking-card { padding: 44px 48px; }
   .form-row { grid-template-columns: 1fr 1fr; }
 }
+/* =========================================================
+   Classes Page — class cards
+   ========================================================= */
+.classes-hero { padding-bottom: 24px; }
+
+.classes-section {
+  padding: 24px 0 112px;
+}
+.classes-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px;
+}
+.class-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+}
+.class-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-soft);
+}
+.class-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.4rem;
+  color: var(--color-teal);
+  margin-bottom: 8px;
+}
+.class-price {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.8rem;
+  color: var(--color-sunrise-2);
+  margin-bottom: 18px;
+}
+.class-price span {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--color-ink-soft);
+}
+.class-features {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 28px;
+  flex: 1;
+}
+.class-features li {
+  position: relative;
+  padding-left: 22px;
+  color: var(--color-ink-soft);
+  font-size: 0.95rem;
+}
+.class-features li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--gradient-sunrise);
+}
+.class-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.class-actions .btn { flex: 1; }
+
+#courseNameDisplay {
+  color: var(--color-sunrise-2);
+}
+
+@media (min-width: 720px) {
+  .classes-grid { grid-template-columns: repeat(3, 1fr); }
+}
