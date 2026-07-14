@@ -332,7 +332,6 @@
 
   // Same Google Apps Script Web App URL used by the Free Trial form.
   // Change this one variable if the endpoint ever moves.
-  var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw0fQ0PKW0Qq02xkX37x_cmhXWF0e2ITJljEpBNRwtx1JXYkoyMWEJfIL9nXZCDTm2q/exec';
 
   // Read course name from the URL, e.g. purchase.html?course=Face%20Yoga
   var params = new URLSearchParams(window.location.search);
